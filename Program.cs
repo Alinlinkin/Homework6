@@ -1,52 +1,61 @@
-﻿int[] InputNumbers(int quantityNumber)
+﻿double[,] InputNumbers()
 {
-    int[] massiveNumbers = new int[quantityNumber];
-    for (int i = 0; i < quantityNumber; i++)
+    double[,] massiveNumbers = new double[2, 2];
+    for (int i = 0; i < massiveNumbers.GetLength(0); i++)
     {
-        Console.Write($"Введи {i + 1} число: ");
-        massiveNumbers[i] = Convert.ToInt32(Console.ReadLine());
+
+        for (int j = 0; j < massiveNumbers.GetLength(1); j++)
+        {
+            if (j == 0)
+            {
+                Console.Write($"Введи b{i + 1} для {i + 1}-ого уравнения y = k{i + 1} * x + b{i + 1}: ");
+                massiveNumbers[i, j] = Convert.ToInt32(Console.ReadLine());
+            }
+            else
+            {
+                Console.Write($"Введи k{i + 1} для {i + 1}-ого уравнения y = k{i + 1} * x + b{i + 1}: ");
+                massiveNumbers[i, j] = Convert.ToInt32(Console.ReadLine());
+            }
+        }
     }
     return massiveNumbers;
+
+
 }
 
-void PrintArray(int[] array)
+double[] Decision(double[,] array)
 {
-    for (int i = 0; i < array.Length; i++)
-    {
-        if (i == array.Length - 1)
-        {
-            Console.Write($"{array[i]}");
-        }
-        else
-        {
-            Console.Write($"{array[i]}, ");
-        }
-    }
+    double[] crossPoint = new double[2];
+    crossPoint[0] = (array[1, 0] - array[0, 0]) / (array[0, 1] - array[1, 1]);
+    crossPoint[1] = (crossPoint[0] - array[0, 0]) / array[0, 1];
+    return crossPoint;
+
 }
 
-int NumbersMorethanZero(int[] array)
+void IntersectionPoints(double[,] array)
 {
-    int count = 0;
-    for (int i = 0; i < array.Length; i++)
+    if (array[0, 0] == array[1, 0] && array[1, 0] == array[1, 1])
     {
-        if (array[i] > 0)
-        {
-            count++;
-        }
+        Console.Write($"b1 = {array[0, 0]}, k1 = {array[0, 1]}, b2 = {array[1, 0]}, k2 = {array[1, 1]} -> Прямые совпадают ");
     }
-    return count;
+    else if (array[0, 1] == array[1, 1] && array[0, 0] != array[1, 0])
+    {
+        Console.Write($"b1 = {array[0, 0]}, k1 = {array[0, 1]}, b2 = {array[1, 0]}, k2 = {array[1, 1]} -> Прямые параллельны ");
+    }
+    else
+    {
+        double[] crossPoint = Decision(array);
+        Console.Write($"b1 = {array[0, 0]}, k1 = {array[0, 1]}, b2 = {array[1, 0]}, k2 = {array[1, 1]} -> ({crossPoint[0]}, {crossPoint[1]})");
+    }
+
 }
 
 try
 {
-    Console.Write($"Введи число М(количество чисел): ");
-    int x = Convert.ToInt32(Console.ReadLine());
-    int[] numbers = InputNumbers(x);
-    Console.Write($"Наш массив: ");
-    PrintArray(numbers);
-    int result = NumbersMorethanZero(numbers);
-    Console.WriteLine("");
-    Console.WriteLine($"Ввведено чисел больше 0 : {result} ");
+
+    double[,] numbers = InputNumbers();
+    IntersectionPoints(numbers);
+
 }
 catch
 {
